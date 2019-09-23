@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <title>LI</title>
+    <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+    <meta name="author" content="Vincent Garreau">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <link rel="stylesheet" media="screen" href="../static/web/login/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/web/login/reset.css">
+    <link rel="stylesheet" href="../static/web/css/animate.css">
+    <link rel="stylesheet" href="../static/web/css/kf.css">
+    <style>
+        #particles-js{
+            background-image: url(../domain/login_bg.png);
+            background-position: 50% 50%;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+    <script src="../static/js/jquery-2.1.3.min.js"></script>
+    <script src="../static/layer/layer.js"></script><link rel="stylesheet" href="../static/layer/theme/layer.css" id="layuicss-layer">
+    <script src="../static/web/js/public.js"></script>
+    <script>
+        $(function () {
+
+            // alert(navigator.userAgent);
+            // 兼容模式
+            if(navigator.userAgent.indexOf("Trident")>0){
+                layer.msg('亲，请不要使用"兼容模式"，因为会让页面渲染很慢甚至产生未知错误，请使用"极速模式"浏览本站。',{icon:7,time:10000});
+            }
+
+            // MSIE内核
+            if(navigator.userAgent.indexOf("MSIE")>0) {
+                layer.msg('亲，请不要使用古董般的IE浏览器 ，请使用现代浏览器浏览本站，比如谷歌、360、QQ、火狐等浏览器。',{icon:2,time:10000});
+
+            }
+            //点击忘记密码
+            $('#forget_password').click(function () {
+                hideBox();
+                $('.forget_login_box').show();
+            })
+
+            //点击返回
+            $('.forget_back').click(function () {
+                hideBox();
+                $('.login_box').show();
+            })
+
+
+            function hideBox(){
+                $('.forget_login_box').hide();
+                $('.login_box').hide();
+                $('.reg_box').hide();
+            }
+
+            //回车登陆
+            document.onkeydown = function (e) {
+                var ev = document.all ? window.event : e;
+                if (ev.keyCode == 13) {
+                    $('#loginBtn').click();
+                }
+            }
+
+            //点击登陆
+            $('#loginBtn').click(function () {
+                $('#loginBtn').html('登陆中...').attr('disabled',true);
+                var user_name = $('[name=user_name]').val();
+                var user_pwd = $('[name=user_pwd]').val();
+                //post提交
+                ajaxPost('/index/login/login.html',{user_name:user_name,user_pwd:user_pwd},function (status) {
+                    //如果登陆失败
+                    if(status == false){
+                        $('#loginBtn').html('登陆').attr('disabled',false);
+                    }
+                });
+            })
+
+            //发送邮件找回密码
+            $('#sendEmail').click(function () {
+                var _this = $(this);
+                _this.html('发送中...').attr('disabled',true);
+
+                var to_email = $('[name=to_email]').val();
+                ajaxPost('/index/email/sendemail.html',{to_email:to_email},function (status) {
+                    //如果发送失败
+                    if(status == false){
+                        _this.html('发送邮件').attr('disabled',false);
+                    }
+                });
+            })
+
+            //点击注册按钮
+            $('#regBtn').click(function () {
+                hideBox();
+                $('.reg_box').show();
+                
+            })
+            
+            //注册页面去注册
+            $('#regSubmit').click(function () {
+                var _this = $(this);
+                _this.html('注册中...').attr('disabled',true);
+
+                var reg_user_email = $('input[name=reg_user_email]').val();
+                var reg_user_pwd = $('input[name=reg_user_pwd]').val();
+                var reg_user_pwd_confirmation = $('input[name=reg_user_pwd_confirmation]').val();
+                var reg_card_password = $('input[name=reg_card_password]').val();
+
+                //post提交
+                ajaxPost('/index/register/reg.html',{reg_user_email,reg_user_pwd,reg_user_pwd_confirmation,reg_card_password},function (status) {
+                    //如果登陆失败
+                    if(status == false){
+                        _this.html('注册').attr('disabled',false);
+                    }
+                });
+
+            })
+
+        })
+
+
+
+
+
+
+
+    </script>
+</head>
+<body cz-shortcut-listen="true">
+<div id="particles-js">
+
+    <div class="login reg_box animated fadeIn" style="display: none">
+        <div class="login-top">
+            成为新会员
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="email" name="reg_user_email" autocomplete="off" placeholder="请输入邮箱" onfocus="this.placeholder=''" onblur="this.placeholder='请输入邮箱'">
+                <div class="login-center-input-text">请填写真实邮箱用于登陆和找回密码</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="password" name="reg_user_pwd" autocomplete="off" placeholder="请输入密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入密码'">
+                <div class="login-center-input-text">不得少于6位</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="password" name="reg_user_pwd_confirmation" autocomplete="off" placeholder="请再次输入密码" onfocus="this.placeholder=''" onblur="this.placeholder='请再次输入密码'">
+                <div class="login-center-input-text">不得少于6位</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="text" name="reg_card_password" autocomplete="off" placeholder="请输入卡密" onfocus="this.placeholder=''" onblur="this.placeholder='请输入卡密'">
+                <div class="login-center-input-text">请联系在线客服获得卡密</div>
+            </div>
+        </div>
+        <div class="login-button_box">
+            <button type="button" class="footer-button" id="regSubmit">注册</button>
+        </div>
+        <div class="login_footer">
+            <a href="javascript:;" class="forget_back">返回</a>
+        </div>
+    </div>
+
+    <div class="login forget_login_box animated fadeIn" style="display: none">
+        <div class="login-top">
+            忘记密码
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="email" name="to_email" value="" placeholder="请输入您的邮箱" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的邮箱'">
+                <div class="login-center-input-text">邮箱</div>
+            </div>
+        </div>
+        <div class="login-button_box">
+
+            <button type="button" class="footer-button" id="sendEmail">发送邮件</button>
+
+        </div>
+        <div class="login_footer">
+            <a href="javascript:;" class="forget_back">返回</a>
+        </div>
+    </div>
+
+    <div class="login login_box animated fadeIn">
+        <div class="login-top">
+            <p>Li</p>
+            <span>读书人的事能叫偷吗？</span>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="text" name="user_name" value="" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'">
+                <div class="login-center-input-text">用户名或邮箱或手机号</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-input">
+                <input type="password" name="user_pwd" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'">
+                <div class="login-center-input-text">密码</div>
+            </div>
+        </div>
+        <div class="login-button_box">
+            <button type="button" id="loginBtn" class="footer-button">登陆</button>
+            <button type="button" id="regBtn" class="footer-button" style="margin-top: 2px;background: #bfd1de">注册</button>
+        </div>
+        <div class="login_footer">
+            <a href="/agency/index/index.html" target="_blank" style="float: left;">代理登陆</a>
+            <a href="javascript:;" id="forget_password" style="float: right;">忘记密码</a>
+
+        </div>
+
+    </div>
+    <div class="sk-rotating-plane"></div>
+    
+
+<canvas class="particles-js-canvas-el" width="1349" height="344" style="width: 100%; height: 100%;"></canvas></div>
+
+<!--客服部分begin-->
+<!--客服部分end-->
+<script>
+    $(function () {
+        /*---------客服返回顶部----------*/
+        $(".btn_top").hide();
+        $(".izl-rmenu").delegate(".btn_top", "click", function () {
+            $('html, body').animate({scrollTop: 0}, 300);
+            return false;
+
+        });
+        $(window).bind('scroll resize', function () {
+            if ($(window).scrollTop() <= 300) {
+                $(".btn_top").hide();
+            } else {
+                $(".btn_top").show();
+            }
+        })
+        /*---------客服返回顶部 end----------*/
+    })
+</script>
+<!-- scripts -->
+<script src="../static/web/login/particles.min.js"></script>
+<script src="../static/web/login/app.js"></script>
+
+
+</body></html>

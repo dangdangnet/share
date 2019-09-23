@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>后台登陆</title>
+<link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	function checkLogin() {
+		alert('...')
+		var account = $.trim($("#account").val());
+		var pwd = $.trim($("#pwd").val());
+
+		if (account == "") {
+			alert("请输入账号。。。。。。");
+			return;
+		}
+		if (pwd == "") {
+			alert("请输入密码。。。。。。");
+			return;
+		}
+		//发送ajax请求
+		$.post("login",{aname:account,pwd:pwd},function(data){
+			data = parseInt($.trim(data));
+			if(data>0){
+				window.location.href='manager/index.jsp';
+			}else{
+				alert("账号或密码错误，请重新输入")
+			}
+		});
+	}
+</script>
+</head>
+<body>
+	<div class="content">
+		<div class="bidTitle">Admin</div>
+		<div class="logCon">
+			<span>账号:</span> <input class="bt_input" id="account" type="text" />
+			<span>密码:</span> <input class="bt_input" id="pwd" type="password" />
+			<button type="button" class="logingBut" onclick="javascript:checkLogin()">登录</button>
+		</div>
+	</div>
+</body>
+</html>
